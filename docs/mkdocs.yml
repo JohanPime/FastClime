@@ -1,0 +1,16 @@
+site_name: FastClime
+theme:
+  name: material
+plugins:
+  - search
+  - mkdocstrings
+
+nav:
+  - Home: index.md
+  - Architecture:
+      - Modules Overview: modules.md
+      - M0 Storage-Hub: 'auto/m0_storage.md'
+      - M1 ETL-Ingest:  'auto/m1_etl.md'
+      - M2 Dynamic-Model: 'auto/m2_dynamic.md'
+      - M3 ML-Predict: 'auto/m3_ml.md'
+      - M4 Dashboard: 'auto/m4_dashboard.md'

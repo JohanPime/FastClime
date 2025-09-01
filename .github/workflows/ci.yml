@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+# Cancel in-progress runs on new commits to same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: Install GDAL
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gdal-bin libgdal-dev
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # Set GDAL_VERSION env var for the pip install step
+        export GDAL_VERSION=$(gdal-config --version)
+        pip install -e ".[dev,docs]"
+
+    - name: Lint with Ruff
+      run: |
+        ruff check .
+        ruff format --check .
+
+    - name: Check formatting with Black
+      run: |
+        black --check .
+
+    - name: Test with pytest (all modules)
+      run: |
+        pytest -q --cov=src/fastclime --cov-report=xml
+
+    - name: Test Storage Hub module specifically
+      run: |
+        pytest -q tests/test_storage.py
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: JohanPime/fastclime
+
+    - name: Build docs to check for errors
+      run: |
+        mkdocs build --strict
+
+  docker-build-test:
+    name: Build & smoke-test Docker
+    runs-on: ubuntu-latest
+    needs: test-and-lint
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build image using env/Dockerfile
+      - name: Build image
+        run: |
+          docker build -t fastclime:test -f env/Dockerfile .
+
+      # Smoke-test: CLI must respond
+      - name: Run fastclime --help
+        run: |
+          docker run --rm fastclime:test fastclime --help

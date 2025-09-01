@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fastclime"
+version = "0.0.1"
+description = "Geospatial + ML climate-simulation toolkit"
+authors = [{name="Johan Pimentel", email="japh507@gmail.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.9"
+
+dependencies = [
+  "numpy", "pandas", "xarray",
+  "geopandas", "rasterio", "shapely", "pyproj",
+  "scikit-learn", "lightgbm", "typer[standard]", "tqdm", "pydantic-settings", "duckdb"
+]
+
+[project.optional-dependencies]
+dev  = ["black", "ruff", "pre-commit", "pytest", "pytest-cov", "ipykernel"]
+docs = ["mkdocs-material", "mkdocstrings[python]"]
+
+[project.scripts]
+fastclime = "fastclime.cli:app"

@@ -1,0 +1,26 @@
+name: fastclime
+channels:
+  - conda-forge
+dependencies:
+  # — core —
+  - python >=3.9,<3.13
+  - numpy
+  - pandas
+  - xarray
+  - geopandas
+  - rasterio
+  - shapely
+  - pyproj
+  - scikit-learn
+  - lightgbm
+  - gdal >=3.8,<3.9
+  # — dev —
+  - black
+  - ruff
+  - pytest
+  - pytest-cov
+  - ipykernel
+  - pip
+  - pip:
+      - typer[standard]
+      - pydantic-settings
