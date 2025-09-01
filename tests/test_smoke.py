@@ -36,7 +36,7 @@ def test_help_flag():
     "command, is_placeholder",
     [
         (["storage", "info"], False),
-        (["ingest", "run", "smap"], True),
+        (["ingest", "list"], False),
         (["model", "run", "eto"], True),
         (["predict", "train"], True),
         (["visualize", "start"], True),

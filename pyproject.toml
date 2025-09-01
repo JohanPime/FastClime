@@ -13,11 +13,12 @@ requires-python = ">=3.9"
 dependencies = [
   "numpy", "pandas", "xarray",
   "geopandas", "rasterio", "shapely", "pyproj",
-  "scikit-learn", "lightgbm", "typer[standard]", "tqdm", "pydantic-settings", "duckdb"
+  "scikit-learn", "lightgbm", "typer[standard]", "tqdm", "pydantic-settings", "duckdb",
+  "requests", "h5py",
 ]
 
 [project.optional-dependencies]
-dev  = ["black", "ruff", "pre-commit", "pytest", "pytest-cov", "ipykernel"]
+dev  = ["black", "ruff", "pre-commit", "pytest", "pytest-cov", "ipykernel", "pytest-mock"]
 docs = ["mkdocs-material", "mkdocstrings[python]"]
 
 [project.scripts]

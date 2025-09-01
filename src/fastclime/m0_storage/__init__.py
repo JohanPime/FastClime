@@ -4,6 +4,7 @@ Public API for the M0 Storage-Hub module.
 This module provides a centralized way to manage data directories,
 file paths, and metadata for the FastClime project.
 """
+
 from fastclime.config import settings
 from .io import data_path, calculate_sha256, Stage
 from .catalog import DataCatalog
@@ -13,19 +14,24 @@ log = get_logger(__name__)
 
 # --- Public API for the Storage Hub ---
 
+
 def get_catalog() -> DataCatalog:
     """Returns a fresh instance of the DataCatalog."""
     return DataCatalog()
 
+
 # Expose the DATA_DIR directly from settings for convenience
 DATA_DIR = settings.DATA_DIR
+
 
 # Expose key functions from submodules
 def register_dataset(*args, **kwargs):
     get_catalog().register_dataset(*args, **kwargs)
 
+
 def register_artifact(*args, **kwargs):
     return get_catalog().register_artifact(*args, **kwargs)
+
 
 def sync(remote_source: str):
     """

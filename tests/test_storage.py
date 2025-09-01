@@ -1,6 +1,7 @@
 import pytest
 from typer.testing import CliRunner
 import duckdb
+import importlib
 
 from fastclime.cli import app
 from fastclime.m0_storage import (
@@ -9,17 +10,14 @@ from fastclime.m0_storage import (
     calculate_sha256,
     data_path,
 )
-from fastclime.config import Settings
-
-runner = CliRunner()
-
-
-import importlib
 
 # We need to reload the modules that use the settings object
 # to make sure they get the patched DATA_DIR from the env var.
 from fastclime import config
 from fastclime.m0_storage import catalog, io, cli as storage_cli
+
+runner = CliRunner()
+
 
 @pytest.fixture
 def temp_storage(tmp_path, monkeypatch):
