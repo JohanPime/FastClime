@@ -37,7 +37,7 @@ def test_help_flag():
     [
         (["storage", "info"], False),
         (["ingest", "list"], False),
-        (["model", "run", "eto"], True),
+        (["model", "project"], False),
         (["predict", "train"], True),
         (["visualize", "start"], True),
     ],

@@ -9,6 +9,9 @@ ENV PYTHONUNBUFFERED=1 \
 # Set workdir
 WORKDIR /app
 
+# Add src to PYTHONPATH
+ENV PYTHONPATH "${PYTHONPATH}:/app/src"
+
 # Install system dependencies, including GDAL for geospatial libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gdal-bin \
