@@ -23,3 +23,6 @@ docs = ["mkdocs-material", "mkdocstrings[python]"]
 
 [project.scripts]
 fastclime = "fastclime.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fastclime"]

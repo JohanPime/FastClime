@@ -58,6 +58,10 @@ jobs:
       run: |
         pytest -q tests/test_storage.py
 
+    - name: Test Dynamic Model module specifically
+      run: |
+        pytest -q tests/test_dynamic.py
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
       with:
