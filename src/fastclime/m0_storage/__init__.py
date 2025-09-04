@@ -7,7 +7,7 @@ file paths, and metadata for the FastClime project.
 
 from fastclime.config import settings
 from .io import data_path, calculate_sha256, Stage
-from .catalog import DataCatalog
+from .catalog import DataCatalog, get_catalog as get_catalog_singleton
 from ..core.logging import get_logger
 
 log = get_logger(__name__)
@@ -17,7 +17,7 @@ log = get_logger(__name__)
 
 def get_catalog() -> DataCatalog:
     """Returns a fresh instance of the DataCatalog."""
-    return DataCatalog()
+    return get_catalog_singleton()
 
 
 # Expose the DATA_DIR directly from settings for convenience

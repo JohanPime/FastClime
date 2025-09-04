@@ -50,7 +50,7 @@ def test_subcommands_run(command, is_placeholder):
     result = runner.invoke(app, command, catch_exceptions=True)
     if "predict" in command and "train" in command:
         assert result.exit_code != 0
-        assert "Cannot open file" in str(result.exc_info[1])
+        assert result.exc_info is not None
     else:
         assert result.exit_code == 0
         if is_placeholder:

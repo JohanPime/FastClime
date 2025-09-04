@@ -1,6 +1,7 @@
 # FastClime
 
 [![CI](https://github.com/JohanPime/fastclime/actions/workflows/ci.yml/badge.svg)](https://github.com/JohanPime/fastclime/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-XX%25-brightgreen.svg)](https://github.com/JohanPime/fastclime/actions/workflows/ci.yml)
 [![Docs](https://github.com/JohanPime/fastclime/actions/workflows/docs.yml/badge.svg)](https://johanpime.github.io/fastclime/)
 [![PyPI version](https://badge.fury.io/py/fastclime.svg)](https://badge.fury.io/py/fastclime)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

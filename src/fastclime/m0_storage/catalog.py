@@ -2,6 +2,7 @@ import duckdb
 from pathlib import Path
 import uuid
 from datetime import datetime
+from typing import Optional
 
 from fastclime.config import settings
 from fastclime.core.logging import get_logger
@@ -94,3 +95,14 @@ class DataCatalog:
             f"Registered artifact for dataset '{dataset_name}' at '{relative_path}'."
         )
         return artifact_id
+
+
+_CATALOG_SINGLETON: Optional[DataCatalog] = None
+
+
+def get_catalog() -> "DataCatalog":
+    """Returns the singleton DataCatalog instance."""
+    global _CATALOG_SINGLETON
+    if _CATALOG_SINGLETON is None:
+        _CATALOG_SINGLETON = DataCatalog()
+    return _CATALOG_SINGLETON
