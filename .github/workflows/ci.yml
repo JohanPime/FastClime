@@ -52,7 +52,7 @@ jobs:
 
     - name: Test with pytest (all modules)
       run: |
-        pytest -q --cov=src/fastclime --cov-report=xml
+        pytest -q --cov=fastclime --cov-report=xml --cov-report=term
 
     - name: Test Storage Hub module specifically
       run: |
@@ -61,6 +61,9 @@ jobs:
     - name: Test Dynamic Model module specifically
       run: |
         pytest -q tests/test_dynamic.py
+
+    - name: Run ML tests
+      run: pytest -q tests/ml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4

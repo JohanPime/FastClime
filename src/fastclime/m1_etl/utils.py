@@ -8,9 +8,9 @@ import requests
 from tqdm import tqdm
 from fastclime.core.logging import get_logger
 import rasterio
+from rasterio import mask
 from rasterio.merge import merge
 from rasterio.warp import calculate_default_transform, reproject, Resampling
-from rasterio.mask import mask
 from shapely.geometry import box
 import geopandas as gpd
 import h5py
@@ -124,7 +124,7 @@ def reproject_raster(
             # Ensure the geometry CRS matches the dataset CRS before clipping
             gdf = gdf.to_crs(dataset.crs)
 
-            out_image, out_transform = rasterio.mask.mask(
+            out_image, out_transform = mask.mask(
                 dataset, gdf.geometry, crop=True
             )
             out_meta = dataset.meta.copy()

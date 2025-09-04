@@ -38,13 +38,20 @@ def test_help_flag():
         (["storage", "info"], False),
         (["ingest", "list"], False),
         (["model", "project"], False),
-        (["predict", "train"], True),
+        (["predict", "train", "stress_clf", "--n-estimators", "1"], False),
         (["visualize", "start"], True),
     ],
 )
 def test_subcommands_run(command, is_placeholder):
     """Test that subcommands run without error."""
-    result = runner.invoke(app, command)
-    assert result.exit_code == 0
-    if is_placeholder:
-        assert "placeholder" in result.stdout.lower()
+    # For the train command, we expect it to fail because it needs data,
+    # but we just want to check that it's not a placeholder anymore.
+    # A FileNotFoundError is expected.
+    result = runner.invoke(app, command, catch_exceptions=True)
+    if "predict" in command and "train" in command:
+        assert result.exit_code != 0
+        assert "Cannot open file" in str(result.exc_info[1])
+    else:
+        assert result.exit_code == 0
+        if is_placeholder:
+            assert "placeholder" in result.stdout.lower()
