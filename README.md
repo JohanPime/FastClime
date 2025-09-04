@@ -86,12 +86,24 @@ graph TD
     ```
 6.  **Submit a pull request.**
 
+## Quick-start ML
+
+Train a model to predict water stress:
+```bash
+fastclime predict train stress_clf
+```
+
+Generate predictions for a new dataset:
+```bash
+fastclime predict batch --model stress_clf --csv-in samples.csv --csv-out predictions.csv
+```
+
 ## Roadmap
 
--   [ ] **M0 Storage-Hub:** Unified data and artifact management.
--   [ ] **M1 ETL-Ingest:** Dataset download and cleaning pipeline.
--   [ ] **M2 Dynamic-Model:** Soil-plant-atmosphere physics calculations.
--   [ ] **M3 ML-Predict:** Risk and optimization models.
+-   [x] **M0 Storage-Hub:** Unified data and artifact management.
+-   [x] **M1 ETL-Ingest:** Dataset download and cleaning pipeline.
+-   [x] **M2 Dynamic-Model:** Soil-plant-atmosphere physics calculations.
+-   [x] **M3 ML-Predict:** Risk and optimization models.
 -   [ ] **M4 Dashboard:** Visualization and APIs.
 ---
 

@@ -134,3 +134,6 @@ venv.bak/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# FastClime data
+fastclime_data/
