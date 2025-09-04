@@ -5,7 +5,7 @@ from fastclime.m1_etl import ingest
 from fastclime.m0_storage.catalog import DataCatalog
 
 
-def test_dem_ingest_pipeline(mocker, mock_etl_env):
+def test_dem_ingest_pipeline(mocker, mock_etl_env, db_path):
     """
     Tests the full DEM ingest pipeline using mocked downloads and processing.
     """
@@ -37,7 +37,7 @@ def test_dem_ingest_pipeline(mocker, mock_etl_env):
     assert final_path.exists()
 
     # Check the catalog
-    catalog = DataCatalog(db_path=mock_etl_env["catalog_db_path"])
+    catalog = DataCatalog(db_path=db_path)
     with catalog.get_connection() as con:
         dataset_entry = con.execute(
             "SELECT * FROM datasets WHERE name = 'dem'"

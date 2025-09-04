@@ -8,7 +8,6 @@ import requests
 from tqdm import tqdm
 from fastclime.core.logging import get_logger
 import rasterio
-from rasterio import mask
 from rasterio.merge import merge
 from rasterio.warp import calculate_default_transform, reproject, Resampling
 from shapely.geometry import box
@@ -124,9 +123,9 @@ def reproject_raster(
             # Ensure the geometry CRS matches the dataset CRS before clipping
             gdf = gdf.to_crs(dataset.crs)
 
-            out_image, out_transform = mask.mask(
-                dataset, gdf.geometry, crop=True
-            )
+            from rasterio import mask as rio_mask
+
+            out_image, out_transform = rio_mask.mask(dataset, gdf.geometry, crop=True)
             out_meta = dataset.meta.copy()
             out_meta.update(
                 {

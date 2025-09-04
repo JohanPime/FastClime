@@ -2,13 +2,15 @@
 
 import pytest
 from pathlib import Path
+import duckdb
+import pathlib
 
 from fastclime.config import settings
 from fastclime.m0_storage.catalog import DataCatalog
-
+from fastclime.m3_ml.train import _ensure_tables
 
 @pytest.fixture(scope="function")
-def mock_etl_env(tmp_path: Path, monkeypatch):
+def mock_etl_env(tmp_path: Path, monkeypatch, db_path):
     """
     Creates a self-contained, temporary environment for ETL tests.
 
@@ -45,12 +47,9 @@ def mock_etl_env(tmp_path: Path, monkeypatch):
     importlib.reload(constants)
     importlib.reload(orchestrator)
 
-    # 3. Initialize a temporary data catalog
-    catalog_db_path = data_dir / "test_catalog.db"
-    monkeypatch.setattr(
-        orchestrator, "DataCatalog", lambda: DataCatalog(db_path=catalog_db_path)
-    )
-    catalog = DataCatalog(db_path=catalog_db_path)
+    # 3. The catalog is handled by the autouse patch_catalog fixture.
+    # We just need to ensure the schema is initialized for this test's db.
+    catalog = DataCatalog(db_path=db_path)
     catalog.init_catalog()
 
     # 4. Return paths for the test to use
@@ -59,6 +58,19 @@ def mock_etl_env(tmp_path: Path, monkeypatch):
         "raw_dir": raw_dir,
         "processed_dir": processed_dir,
         "temp_dir": temp_dir,
-        "catalog_db_path": catalog_db_path,
     }
     return env
+
+
+@pytest.fixture(scope="session")
+def db_path(tmp_path_factory) -> pathlib.Path:
+    """Ruta temporal para la base DuckDB usada en integración."""
+    return tmp_path_factory.mktemp("db") / "catalog.db"
+
+@pytest.fixture(scope="session", autouse=True)
+def bootstrap_catalog(db_path):
+    import fastclime.m0_storage.catalog as cat_mod
+    con = duckdb.connect(str(db_path))
+    _ensure_tables(con)
+    con.close()
+    cat_mod._CATALOG_SINGLETON = cat_mod.DataCatalog(db_path)

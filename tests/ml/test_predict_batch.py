@@ -3,12 +3,21 @@ import numpy as np
 from fastclime.m3_ml.serve import predict_batch
 from fastclime.m3_ml.models.stress_clf import StressClf
 
+
 def test_batch(tmp_path):
-    csv_in = tmp_path/"in.csv"
-    csv_out = tmp_path/"out.csv"
-    pd.DataFrame({"date":["2025-01-01"],"deficit_now_mm":[1],
-                  "eto":[4],"ndvi":[0.3],"temp_mean":[25],
-                  "rain_24h":[0], "zone_id": [1]}).to_csv(csv_in,index=False)
+    csv_in = tmp_path / "in.csv"
+    csv_out = tmp_path / "out.csv"
+    pd.DataFrame(
+        {
+            "date": ["2025-01-01"],
+            "deficit_now_mm": [1],
+            "eto": [4],
+            "ndvi": [0.3],
+            "temp_mean": [25],
+            "rain_24h": [0],
+            "zone_id": [1],
+        }
+    ).to_csv(csv_in, index=False)
 
     # Create a dummy model directory
     model_dir = tmp_path / "models" / "stress_clf" / "20250101"

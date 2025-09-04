@@ -2,7 +2,7 @@
 
 import pandas as pd
 from fastclime.core.logging import get_logger
-from ..m0_storage.catalog import DataCatalog
+from ..m0_storage.catalog import get_catalog
 from . import equations
 
 log = get_logger(__name__)
@@ -45,7 +45,7 @@ def run_hourly(start_ts: str, end_ts: str, parcel_id: str):
     log.info(
         f"Running hourly simulation from {start_ts} to {end_ts} for parcel {parcel_id}..."
     )
-    catalog = DataCatalog()
+    catalog = get_catalog()
     con = catalog.get_connection()
     _init_tables(con)
 

@@ -3,7 +3,7 @@ import shutil
 
 from fastclime.config import settings
 from fastclime.core.logging import get_logger
-from .catalog import DataCatalog
+from .catalog import get_catalog
 
 log = get_logger(__name__)
 app = typer.Typer(help="Manage the FastClime data storage hub.")
@@ -26,7 +26,7 @@ def init():
         log.info(f"Ensured directory exists: {d}")
 
     # Initialize catalog
-    catalog = DataCatalog()
+    catalog = get_catalog()
     catalog.init_catalog()
 
     print(f"✅ FastClime data storage initialized at: {settings.DATA_DIR}")

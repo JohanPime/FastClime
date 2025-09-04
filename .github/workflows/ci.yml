@@ -62,9 +62,6 @@ jobs:
       run: |
         pytest -q tests/test_dynamic.py
 
-    - name: Run ML tests
-      run: pytest -q tests/ml
-
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
       with:
@@ -75,8 +72,38 @@ jobs:
       run: |
         mkdocs build --strict
 
-  docker-build-test:
-    name: Build & smoke-test Docker
+  ml-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    - name: Install dependencies
+      run: |
+        pip install ".[dev]"
+    - name: Run ML tests
+      run: |
+        pytest -q --cov=fastclime tests/ml
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-xml
+        path: coverage.xml
+    - name: Update coverage badge
+      run: |
+        COVERAGE=$(pytest --cov=fastclime --cov-report=term-missing | grep TOTAL | awk '{print $3}')
+        sed -i "s/coverage-XX%25/coverage-$COVERAGE/" README.md
+
+  docker-smoke-base:
+    name: Build & smoke-test Docker (Base)
     runs-on: ubuntu-latest
     needs: test-and-lint
     steps:
@@ -91,3 +118,19 @@ jobs:
       - name: Run fastclime --help
         run: |
           docker run --rm fastclime:test fastclime --help
+
+  docker-smoke-ml:
+    name: Build & smoke-test Docker (ML)
+    runs-on: ubuntu-latest
+    needs: ml-tests
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build image using env/Dockerfile
+      - name: Build image
+        run: |
+          docker build -t fastclime:test -f env/Dockerfile .
+
+      - name: Run fastclime predict --help
+        run: |
+          docker run --rm fastclime:test ./fastclime predict --help

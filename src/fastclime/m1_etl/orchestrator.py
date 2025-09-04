@@ -7,7 +7,7 @@ from pathlib import Path
 
 from fastclime.m1_etl.datasets import DATASETS
 from . import constants
-from ..m0_storage.catalog import DataCatalog
+from ..m0_storage.catalog import get_catalog
 from ..core.logging import get_logger
 
 log = get_logger(__name__)
@@ -55,7 +55,7 @@ def ingest(
         if not keep_temp:
             shutil.rmtree(temp_dir, ignore_errors=True)
 
-    catalog = DataCatalog()
+    catalog = get_catalog()
     catalog.register_dataset(
         name=dataset_name,
         source="http",  # Placeholder

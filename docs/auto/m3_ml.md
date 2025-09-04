@@ -2,12 +2,10 @@
 
 ## Flujo general
 ```mermaid
-flowchart LR
-    A[metrics_hourly + NDVI] --> B[make_features()]
-    B --> C[train.py]
-    C --> D[LightGBM model]
-    D --> E[joblib artifact]
-    E --> F[serve.py] --> G[Dashboard M4]
+flowchart TD
+    A[Raw features] --> B[make_features]
+    B --> C[StressClassifier]
+    B --> D[LaminaRegressor]
 ```
 
 ## Features
