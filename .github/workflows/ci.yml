@@ -102,6 +102,17 @@ jobs:
         COVERAGE=$(pytest --cov=fastclime --cov-report=term-missing | grep TOTAL | awk '{print $3}')
         sed -i "s/coverage-XX%25/coverage-$COVERAGE/" README.md
 
+  dashboard-tests:
+    runs-on: ubuntu-latest
+    needs: [ml-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install ".[dev]"
+      - run: pytest -q tests/ml_dashboard
+
   docker-smoke-base:
     name: Build & smoke-test Docker (Base)
     runs-on: ubuntu-latest

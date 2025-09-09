@@ -1,13 +1,13 @@
-import typer
-from fastclime.core.logging import get_logger
-
-log = get_logger(__name__)
-app = typer.Typer(help="Launch visualization dashboards and APIs.")
-
+import typer, subprocess, os
+app = typer.Typer(help="Dashboard & API commands")
 
 @app.command()
-def start(port: int = typer.Option(8501, help="Port to run the dashboard on.")):
-    """Start the Streamlit/Gradio dashboard (placeholder)."""
-    log.info(f"Starting dashboard on port {port}...")
-    print(f"Starting dashboard on port {port}... (placeholder)")
-    print("In a real scenario, this would run `streamlit run ...`")
+def run(host: str = "0.0.0.0", port: int = 8501):
+    """Arranca Streamlit + FastAPI."""
+    os.environ["FASTCLIME_ALLOW_EXEC"] = "1"
+    subprocess.run(["streamlit", "run", "src/fastclime/m4_dashboard/app.py", "--server.port", str(port)])
+
+@app.command()
+def openapi():
+    """Imprime la URL de la documentación interactiva."""
+    typer.echo("http://localhost:8501/api/docs")

@@ -29,7 +29,7 @@ app.add_typer(
 )
 app.add_typer(ml_app, name="predict", help="Train and run ML prediction models.")
 app.add_typer(
-    dashboard_app, name="visualize", help="Launch visualization dashboards and APIs."
+    dashboard_app, name="dashboard", help="Launch the Dashboard & API."
 )
 
 
