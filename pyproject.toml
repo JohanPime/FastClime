@@ -14,11 +14,12 @@ dependencies = [
   "numpy", "pandas", "xarray",
   "geopandas", "rasterio", "shapely", "pyproj",
   "scikit-learn", "lightgbm", "typer[standard]", "tqdm", "pydantic-settings", "duckdb",
-  "requests", "h5py",
+  "requests", "h5py", "streamlit", "fastapi", "uvicorn[standard]", "plotly", "pydantic",
+  "python-multipart",
 ]
 
 [project.optional-dependencies]
-dev  = ["black", "ruff", "pre-commit", "pytest", "pytest-cov", "ipykernel", "pytest-mock"]
+dev  = ["black", "ruff", "pre-commit", "pytest", "pytest-cov", "ipykernel", "pytest-mock", "httpx"]
 docs = ["mkdocs-material", "mkdocstrings[python]"]
 
 [project.scripts]
@@ -26,3 +27,8 @@ fastclime = "fastclime.cli:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fastclime"]
+
+[tool.pytest.ini_options]
+markers = [
+    "streamlit: mark a test as a streamlit app test",
+]

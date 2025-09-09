@@ -27,7 +27,7 @@ def test_help_flag():
     assert "Usage: fastclime [OPTIONS] COMMAND [ARGS]..." in result.stdout
 
     # Check that all module commands are listed
-    expected_commands = ["storage", "ingest", "model", "predict", "visualize"]
+    expected_commands = ["storage", "ingest", "model", "predict", "dashboard"]
     for cmd in expected_commands:
         assert cmd in result.stdout, f"Command '{cmd}' not found in --help output."
 
@@ -39,7 +39,7 @@ def test_help_flag():
         (["ingest", "list"], False),
         (["model", "project"], False),
         (["predict", "train", "stress_clf", "--n-estimators", "1"], False),
-        (["visualize", "start"], True),
+        (["dashboard", "run", "--help"], False), # Test the help of the run subcommand
     ],
 )
 def test_subcommands_run(command, is_placeholder):
@@ -48,6 +48,14 @@ def test_subcommands_run(command, is_placeholder):
     # but we just want to check that it's not a placeholder anymore.
     # A FileNotFoundError is expected.
     result = runner.invoke(app, command, catch_exceptions=True)
+
+    # The dashboard command will try to run streamlit, which will fail in a non-interactive env
+    # unless we just ask for --help.
+    if "dashboard" in command:
+        assert result.exit_code == 0
+        assert "Arranca Streamlit + FastAPI" in result.stdout
+        return
+
     if "predict" in command and "train" in command:
         assert result.exit_code != 0
         assert result.exc_info is not None
